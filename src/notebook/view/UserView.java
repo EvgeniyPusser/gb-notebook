@@ -38,6 +38,19 @@ public class UserView {
                 case UPDATE:
                     String userId = prompt("Enter user id: ");
                     userController.updateUser(userId, createUser());
+                case LIST:
+                    System.out.printf(UserController.readAll());
+                     break;
+                case DELETE:
+                    String userToDeleteStr = prompt("Enter user id: ");
+                    try {
+                        Long userIdToDelete = Long.parseLong(userToDeleteStr);
+                        User userToDelete = userController.readUser(userIdToDelete);
+                        userController.delete(userIdToDelete, userToDelete);
+                        System.out.println("User deleted successfully.");
+                    } catch (Exception e) {
+                        System.out.println("No user with this id");
+                    }
             }
         }
     }

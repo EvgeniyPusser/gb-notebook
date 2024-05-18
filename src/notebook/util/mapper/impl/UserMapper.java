@@ -12,12 +12,16 @@ public class UserMapper implements Mapper {
     @Override
     public User toOutput(String s) {
         String[] lines = s.split(",");
+        if (lines.length != 4) {
+            throw new IllegalArgumentException("Invalid input format: " + s);
+        }
         long id;
         if (isDigit(lines[0])) {
             id = Long.parseLong(lines[0]);
-            return new User(id, lines[1], lines[2], lines[3]);
+        } else {
+            throw new NumberFormatException("Id must be a large number" + lines[0]);
         }
-        throw new NumberFormatException("Id must be a large number");
+        return new User(id, lines[1], lines[2], lines[3]);
     }
 
     private boolean isDigit(String s) throws NumberFormatException {
