@@ -2,6 +2,7 @@ package notebook.model.repository.impl;
 
 
 import notebook.util.DBConnector;
+import notebook.util.UserValidator;
 import notebook.util.mapper.impl.UserMapper;
 import notebook.model.User;
 import notebook.model.repository.GBRepository;
@@ -69,9 +70,19 @@ public class UserRepository implements GBRepository {
         }
         return users;
     }
+    public void userValid(User user){
+        UserValidator validator = new UserValidator();
+        if(validator.isIdEmpty(user.getId())){
+            throw new RuntimeException("id null");
+        }
+        user.setFirstName(validator.isNameValid(user.getFirstName()));
+        user.setLastName(validator.isNameValid(user.getLastName()));
+    }
 
     @Override
     public User create(User user) {
+        userValid(user);
+
         List<User> users = findAll();
         long max = 0L;
         for (User u : users) {
